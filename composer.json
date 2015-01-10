@@ -1,0 +1,20 @@
+{
+    "name": "alixba/addic7ed-subtitles",
+    "require": {
+        "fabpot/goutte": "2.0.*@dev",
+        "noodlehaus/config": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Alix Ba",
+            "email": "alix.baggio@outlook.fr"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "": "src"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable" : true
+}

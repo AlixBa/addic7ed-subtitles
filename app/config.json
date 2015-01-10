@@ -1,0 +1,26 @@
+{
+    "addic7ed": {
+        "scheme": "http",
+        "url": "www.addic7ed.com",
+        "shows-uri": "shows.php",
+        "show-uri": "shows",
+        "show-ajax-uri": "ajax_loadShow.php",
+        "show-ajax-uri-query": "show=[SHOW]&season=[SEASON]&langs=|[LANGS]|&hd=0&hi=0"
+    },
+
+    "request": {
+        "headers": {
+            "Host": "[URL]",
+            "Referer": "[SCHEME]://[URL]/[SHOW-URI]/[SHOW]",
+            "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0",
+            "Accept": "text/javascript, text/html, application/xml, text/xml, */*",
+            "Accept-Language": "fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3",
+            "Accept-Encoding": "gzip, deflate",
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    },
+
+    "subtitle": {
+        "language": "fr"
+    }
+}

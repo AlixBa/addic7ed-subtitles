@@ -1,0 +1,12 @@
+## HOW TO
+
+Clone this repository.
+Change language in `app/config.json`
+
+## USAGE
+
+`addic7ed-php [file] [file] [...]`
+
+## CONTRIBUTE
+
+Feel free to contribute :)
