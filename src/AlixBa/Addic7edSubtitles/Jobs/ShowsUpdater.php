@@ -75,7 +75,7 @@ final class ShowsUpdater
     public function blacklistedShows()
     {
         return [
-          4939
+          4939 // Sleepy.Hollow, empty show on addic7ed - issue with Sleepy Hollow
         ];
     }
 }

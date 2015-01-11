@@ -90,6 +90,6 @@ final class ConfigLoader extends Config
      */
     public function getSubtitleLanguage()
     {
-        return $this->get('subtitle.language');
+        return $this->get('subtitle.language', 'fr');
     }
 }

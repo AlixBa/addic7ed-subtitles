@@ -71,7 +71,7 @@ final class SubtitlesFinder
                 $show = $this->shows[$info['nshow']];
                 $url  = $this->builder->getAddictedShowAjaxUrl($show, $info['season'], $lang);
 
-                printf("Trying to get shows from %s.\n", $url);
+                printf("Trying to get subtitles from %s.\n", $url);
                 $crawler = $this->client->request('GET', $url);
                 $lines   = $crawler
                   ->filter($this->selector)

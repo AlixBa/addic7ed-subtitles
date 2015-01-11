@@ -1,12 +1,23 @@
+Please don't use this to overload Addic7ed servers.
+
 ## HOW TO
 
-Clone this repository.
-Change language in `app/config.json`
+Clone this repository and run `composer`.
+Change language in `app/config.json`.
 
 ## USAGE
 
 `addic7ed-php [file] [file] [...]`
+`addic7ed-php Marvels.Agent.Carter.S01E01.HDTV.x264-KILLERS.mp4 /path/to/Gotham.S01E11.720p.HDTV.X264-DIMENSION.mkv`
 
 ## CONTRIBUTE
 
 Feel free to contribute :)
+
+## IDEAS
+
+* Better searching method for show id.
+* Allow multiple languages.
+* Suffix srt files wih languages ([SHOW].[LANG].srt)
+* Make addic7ed-php with options (override config.json on launch)
+* ...
