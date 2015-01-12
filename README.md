@@ -18,6 +18,9 @@ Feel free to contribute :)
 
 * Better searching method for show id.
 * Allow multiple languages.
-* Suffix srt files wih languages ([SHOW].[LANG].srt)
-* Make addic7ed-php with options (override config.json on launch)
+* Suffix srt files wih languages ([SHOW].[LANG].srt).
+* Make addic7ed-php with options (override config.json on launch).
+* Use tag to determine groups?
+* Weight default group to find best subtitle if multiple groups match.
+* Wait for [this](https://github.com/FriendsOfPHP/Goutte/pull/158) to be merged to set a lower timeout.
 * ...
