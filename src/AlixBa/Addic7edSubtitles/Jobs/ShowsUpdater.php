@@ -66,7 +66,7 @@ final class ShowsUpdater
             }
         };
 
-        Utils::setShows($shows);
+        Utils::saveShows($shows);
     }
 
     /**

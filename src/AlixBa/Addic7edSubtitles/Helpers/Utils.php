@@ -11,7 +11,6 @@ final class Utils
 {
     // PATH from __DIR__
     const SHOWS = '/../../../../app/shows.json';
-
     const LANGS = '/../../../../app/languages.json';
 
     /**
@@ -38,16 +37,8 @@ final class Utils
 
         preg_match($pattern, $file, $matches);
 
-        $available = ['hdtv', 'x264', '720p'];
-        $tags      = explode('.', strtolower($matches['tags']));
-        $tags      = array_intersect($tags, $available);
-
-        $groups = [$matches['group']];
-        if (in_array($matches['group'], ['LOL', 'DIMENSION'])) {
-            $groups = ['LOL', 'DIMENSION'];
-        } elseif (in_array($matches['group'], ['ASAP', 'IMMERSE'])) {
-            $groups = ['ASAP', 'IMMERSE'];
-        }
+        $tags   = self::filterTags($matches['tags']);
+        $groups = self::enrichGroup($matches['group']);
 
         return [
           'show'    => $matches['showname'],
@@ -57,6 +48,43 @@ final class Utils
           'tags'    => $tags,
           'groups'  => $groups,
         ];
+    }
+
+    /**
+     * @param $tags array identified tags
+     *
+     * @return array
+     */
+    public static function filterTags($tags)
+    {
+        $available = ['proper', 'hdtv', 'x264', '720p'];
+        $tags      = explode('.', strtolower($tags));
+
+        return array_intersect($tags, $available);
+    }
+
+    /**
+     * @param $group string initial group
+     *
+     * @return array
+     */
+    public static function enrichGroup($group)
+    {
+        $group  = strtolower($group);
+        $groups = [$group];
+        $hdtv   = ["lol", "afg", "2hd", "asap", "crimson", "lmao", "bajskorv", "killers", "ftp", "bia", "fov", "dimension", "evolve", "immerse"];
+        $webdl  = ["ctrlhd", "kings", "eci", "ntb", "btn", "it00nz", "bs", "pod"];
+        $dvd    = ["reward", "saints", "sprinter", "demand", "ingot", "haggis"];
+
+        if (in_array($group, $hdtv)) {
+            $groups = $hdtv;
+        } elseif (in_array($group, $webdl)) {
+            $groups = $webdl;
+        } elseif (in_array($group, $dvd)) {
+            $groups = $dvd;
+        }
+
+        return $groups;
     }
 
     /**
@@ -84,7 +112,7 @@ final class Utils
      *
      * @return array
      */
-    public static function setShows($shows)
+    public static function saveShows($shows)
     {
         $file = __DIR__.self::SHOWS;
 
@@ -99,7 +127,7 @@ final class Utils
      *
      * @return array
      */
-    public static function setSubtitle($directory, $file, $content)
+    public static function saveSubtitle($directory, $file, $content)
     {
         file_put_contents(sprintf('%s/%s.srt', $directory, $file), $content);
         printf("Subtitle saved into [%s/%s.srt].\n", $directory, $file);

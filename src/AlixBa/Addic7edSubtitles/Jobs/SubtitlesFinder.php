@@ -76,12 +76,15 @@ final class SubtitlesFinder
                 $lines   = $crawler
                   ->filter($this->selector)
                   ->reduce(function (Crawler $node) use ($info) {
-                      $children = $node->children();
+                        $children  = $node->children();
+                        $episode = $children->getNode(1)->nodeValue;
+                        $group   = strtolower($children->getNode(4)->nodeValue);
+                        $status  = strtolower($children->getNode(5)->nodeValue);
 
-                      return
-                        $children->getNode(1)->nodeValue == $info['episode']
-                        && in_array($children->getNode(4)->nodeValue, $info['groups'])
-                        && $children->getNode(5)->nodeValue === 'Completed';
+                        return
+                          $episode == $info['episode']
+                          && in_array($group, $info['groups'])
+                          && $status === 'completed';
                   });
 
                 if ($lines->count() != 0) {
