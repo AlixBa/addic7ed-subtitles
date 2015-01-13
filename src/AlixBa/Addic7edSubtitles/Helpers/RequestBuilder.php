@@ -10,13 +10,13 @@ namespace AlixBa\Addic7edSubtitles\Helpers;
 final class RequestBuilder
 {
     /**
-     * @var \AlixBa\Addic7edSubtitles\Helpers\ConfigLoader
+     * @var \AlixBa\Addic7edSubtitles\Helpers\Config
      */
     private $config;
 
     public function __construct()
     {
-        $this->config = new ConfigLoader();
+        $this->config = new Config();
     }
 
     /**
@@ -44,19 +44,19 @@ final class RequestBuilder
     }
 
     /**
-     * @param $show   int show id
-     * @param $season int season number
-     * @param $lang   int array of lang
+     * @param $showId string show id
+     * @param $season string season number
+     * @param $langId string lang id
      *
      * @return string
      */
-    public function getAddictedShowAjaxUrl($show, $season, $lang)
+    public function getAddictedShowAjaxUrl($showId, $season, $langId)
     {
         $query = $this->config->getAddictedShowAjaxUriQuery();
 
-        $query = str_replace('[SHOW]', $show, $query);
-        $query = str_replace('[SEASON]', $season, $query);
-        $query = str_replace('[LANGS]', $lang, $query);
+        $query = str_replace('[SHOW]', (int) $showId, $query);
+        $query = str_replace('[SEASON]', (int) $season, $query);
+        $query = str_replace('[LANGS]', (int) $langId, $query);
 
         return sprintf(
           '%s/%s?%s',
@@ -67,11 +67,11 @@ final class RequestBuilder
     }
 
     /**
-     * @param $show int show id
+     * @param $showId string show id
      *
      * @return array
      */
-    public function getRequestHeaders($show)
+    public function getRequestHeaders($showId)
     {
         $headers = $this->config->getRequestHeaders();
 
@@ -82,23 +82,23 @@ final class RequestBuilder
         if (isset($headers['Referer'])) {
             $headers['Referer'] = str_replace('[SCHEME]://[URL]', $this->getAddictedUrl(), $headers['Referer']);;
             $headers['Referer'] = str_replace('[SHOW-URI]', $this->config->getAddictedShowUri(), $headers['Referer']);;
-            $headers['Referer'] = str_replace('[SHOW]', $show, $headers['Referer']);;
+            $headers['Referer'] = str_replace('[SHOW]', $showId, $headers['Referer']);;
         }
 
         return $headers;
     }
 
     /**
-     * @param $download string download uri (starting with /)
+     * @param $downloadUri string download uri (starting with /)
      *
      * @return string
      */
-    public function getSubtitleUrl($download)
+    public function getSubtitleUrl($downloadUri)
     {
         return sprintf(
           '%s%s',
           $this->getAddictedUrl(),
-          $download
+          $downloadUri
         );
     }
 }

@@ -2,8 +2,9 @@
 
 namespace AlixBa\Addic7edSubtitles\Jobs;
 
+use AlixBa\Addic7edSubtitles\Helpers\IO;
 use AlixBa\Addic7edSubtitles\Helpers\RequestBuilder;
-use AlixBa\Addic7edSubtitles\Helpers\Utils;
+use AlixBa\Addic7edSubtitles\Helpers\Episode;
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -25,19 +26,20 @@ final class ShowsUpdater
     private $builder;
 
     /**
-     * @var string
+     * @var \AlixBa\Addic7edSubtitles\Helpers\IO
      */
-    private $href = '/^\/show\/(?<id>\d+)$/';
+    private $io;
 
     /**
      * @var string
      */
-    private $selector = 'table.tabel90 > tr > td > h3 > a';
+    private $hrefPattern = '/^\/show\/(?<id>\d+)$/';
 
     public function __construct()
     {
         $this->client  = new Client();
         $this->builder = new RequestBuilder();
+        $this->io      = new IO();
     }
 
     /**
@@ -50,32 +52,54 @@ final class ShowsUpdater
         printf("Trying to get shows from [%s].\n", $url);
         $crawler = $this->client->request('GET', $url);
         $_shows  = $crawler
-          ->filter($this->selector)
+          ->filter('table.tabel90 > tr > td > h3 > a')
           ->reduce(function (Crawler $node) {
-              return preg_match($this->href, $node->attr('href')) === 1;
+              return $this->isShowLink($node->attr('href'));
           })
           ->extract(['_text', 'href']);
 
         printf("Found [%s] shows.\n", count($_shows));
         $shows = [];
         foreach ($_shows as $show) {
-            preg_match($this->href, $show[1], $matches);
-            if (!in_array($matches['id'], $this->blacklistedShows())) {
-                $name         = Utils::sanitizeShowName($show[0]);
-                $shows[$name] = $matches['id'];
+            $id = $this->extractShowId($show[1]);
+            if (!in_array($id, $this->troublesomeShowsId())) {
+                $name         = Episode::sanitizeShowName($show[0]);
+                $shows[$name] = $id;
             }
         };
 
-        Utils::saveShows($shows);
+        $this->io->saveShows($shows);
     }
 
     /**
      * @return array
      */
-    public function blacklistedShows()
+    private function troublesomeShowsId()
     {
         return [
           4939 // Sleepy.Hollow, empty show on addic7ed - issue with Sleepy Hollow
         ];
+    }
+
+    /**
+     * @param $href string the href to parse
+     *
+     * @return string
+     */
+    private function extractShowId($href)
+    {
+        preg_match($this->hrefPattern, $href, $matches);
+
+        return $matches['id'];
+    }
+
+    /**
+     * @param $href string the href to test
+     *
+     * @return bool
+     */
+    private function isShowLink($href)
+    {
+        return preg_match($this->hrefPattern, $href) === 1;
     }
 }

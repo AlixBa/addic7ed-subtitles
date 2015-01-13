@@ -2,8 +2,8 @@ Please don't use this to overload Addic7ed servers.
 
 ## HOW TO
 
-Clone this repository and run `composer`.
-Change language in `app/config.json`.
+Clone this repository and run `composer update`.
+Override wanted parameters from `app/config.reference.json` to `app/config.json`.
 
 ## USAGE
 

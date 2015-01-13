@@ -2,21 +2,21 @@
 
 namespace AlixBa\Addic7edSubtitles\Helpers;
 
-use Noodlehaus\Config;
+use Noodlehaus\Config as NConfig;
 
 /**
- * Class ConfigLoader
+ * Class Config
  *
  * @package AlixBa\Addic7edSubtitles\Helpers
  */
-final class ConfigLoader extends Config
+final class Config extends NConfig
 {
     /**
      * Just hardcoded path to config.
      */
     public function __construct()
     {
-        parent::__construct(__DIR__.'/../../../../app/config.json');
+        parent::__construct((new IO())->configurationPath);
     }
 
     /**
@@ -77,12 +77,12 @@ final class ConfigLoader extends Config
           'Referer'          => '[SCHEME]://[URL]/[SHOW-URI]/[SHOW]',
           'User-Agent'       => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0',
           'Accept'           => 'text/javascript, text/html, application/xml, text/xml, */*',
-          'Accept-Language'  => 'fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3',
+          'Accept-Language'  => 'en-us,en;q=0.5',
           'Accept-Encoding'  => 'gzip, deflate',
           'X-Requested-With' => 'XMLHttpRequest'
         ];
 
-        return $this->get('request.headers', $default);
+        return array_merge($default, $this->get('request.headers', []));
     }
 
     /**
@@ -90,6 +90,6 @@ final class ConfigLoader extends Config
      */
     public function getSubtitleLanguage()
     {
-        return $this->get('subtitle.language', 'fr');
+        return $this->get('subtitle.language', 'en');
     }
 }
