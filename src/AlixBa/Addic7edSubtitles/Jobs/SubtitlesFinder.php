@@ -2,9 +2,10 @@
 
 namespace AlixBa\Addic7edSubtitles\Jobs;
 
-use AlixBa\Addic7edSubtitles\Helpers\ConfigLoader;
+use AlixBa\Addic7edSubtitles\Helpers\Config;
+use AlixBa\Addic7edSubtitles\Helpers\Episode;
+use AlixBa\Addic7edSubtitles\Helpers\IO;
 use AlixBa\Addic7edSubtitles\Helpers\RequestBuilder;
-use AlixBa\Addic7edSubtitles\Helpers\Utils;
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -16,7 +17,7 @@ use Symfony\Component\DomCrawler\Crawler;
 final class SubtitlesFinder
 {
     /**
-     * @var \AlixBa\Addic7edSubtitles\Helpers\ConfigLoader
+     * @var \AlixBa\Addic7edSubtitles\Helpers\Config
      */
     private $config;
 
@@ -31,6 +32,11 @@ final class SubtitlesFinder
     private $builder;
 
     /**
+     * @var \AlixBa\Addic7edSubtitles\Helpers\IO
+     */
+    private $io;
+
+    /**
      * @var array
      */
     private $shows;
@@ -38,62 +44,57 @@ final class SubtitlesFinder
     /**
      * @var array
      */
-    private $langs;
-
-    /**
-     * @var string
-     */
-    private $selector = 'div#season > table > tbody > tr.epeven';
+    private $languages;
 
     public function __construct()
     {
-        $this->config  = new ConfigLoader();
-        $this->client  = new Client();
-        $this->builder = new RequestBuilder();
-        $this->shows   = Utils::getShows();
-        $this->langs   = Utils::getLangs();
+        $this->config    = new Config();
+        $this->client    = new Client();
+        $this->builder   = new RequestBuilder();
+        $this->io        = new IO();
+        $this->shows     = $this->io->getShows();
+        $this->languages = $this->io->getLanguages();
     }
 
     /**
-     * @param $file string show file name
+     * @param $episodeFilename string show file name
      *
      * @return null|string
      */
-    public function findSubtitle($file)
+    public function findSubtitle($episodeFilename)
     {
-        $lang = $this->config->getSubtitleLanguage();
-        if (isset($this->langs[$lang])) {
-            $lang = $this->langs[$lang];
+        $languageId = $this->config->getSubtitleLanguage();
+        if (isset($this->languages[$languageId])) {
+            $languageId = $this->languages[$languageId];
 
-            // TODO improve by a better search method
-            $info = Utils::fileToInfo($file);
-            if (isset($this->shows[$info['nshow']])) {
-                $show = $this->shows[$info['nshow']];
-                $url  = $this->builder->getAddictedShowAjaxUrl($show, $info['season'], $lang);
+            $episode = new Episode($episodeFilename);
+            if (isset($this->shows[$episode->sanitizedShowName])) {
+                $showId = $this->shows[$episode->sanitizedShowName];
+                $url    = $this->builder->getAddictedShowAjaxUrl($showId, $episode->season, $languageId);
 
                 printf("Trying to get subtitles from %s.\n", $url);
-                $crawler = $this->client->request('GET', $url);
-                $lines   = $crawler
-                  ->filter($this->selector)
-                  ->reduce(function (Crawler $node) use ($info) {
-                        $children  = $node->children();
-                        $episode = $children->getNode(1)->nodeValue;
-                        $group   = strtolower($children->getNode(4)->nodeValue);
-                        $status  = strtolower($children->getNode(5)->nodeValue);
+                $crawler           = $this->client->request('GET', $url);
+                $matchingSubtitles = $crawler
+                  ->filter('div#season > table > tbody > tr.epeven')
+                  ->reduce(function (Crawler $node) use ($episode) {
+                      $children = $node->children();
+                      $ep       = $children->getNode(1)->nodeValue;
+                      $group    = strtolower($children->getNode(4)->nodeValue);
+                      $status   = strtolower($children->getNode(5)->nodeValue);
 
-                        return
-                          $episode == $info['episode']
-                          && in_array($group, $info['groups'])
-                          && $status === 'completed';
+                      return
+                        (int) $ep === (int) $episode->ep
+                        && in_array($group, $episode->groups)
+                        && $status === 'completed';
                   });
 
-                if ($lines->count() != 0) {
-                    $line     = $lines->first();
-                    $download = $line->children()->getNode(9)->firstChild->getAttribute('href');
-                    $url      = $this->builder->getSubtitleUrl($download);
+                if ($matchingSubtitles->count() != 0) {
+                    $chosenSubtitle = $matchingSubtitles->first();
+                    $download       = $chosenSubtitle->children()->getNode(9)->firstChild->getAttribute('href');
+                    $url            = $this->builder->getSubtitleUrl($download);
 
                     printf("Downloading subtitle [%s].\n", $url);
-                    $headers = $this->builder->getRequestHeaders($show);
+                    $headers = $this->builder->getRequestHeaders($showId);
 
                     return $this
                       ->client
@@ -103,13 +104,13 @@ final class SubtitlesFinder
                       ->getContents();
 
                 } else {
-                    printf("Missing subtitles for [%s].\n", $file);
+                    printf("Missing subtitles for [%s].\n", $episodeFilename);
                 }
             } else {
-                printf("Missing show [%s].\n", $info['show']);
+                printf("Missing show [%s].\n", $episode->showName);
             }
         } else {
-            printf("Missing language [%s].\n", $lang);
+            printf("Missing language [%s].\n", $languageId);
         }
 
         return null;

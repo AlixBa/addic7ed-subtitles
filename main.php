@@ -5,9 +5,11 @@ if (php_sapi_name() === 'cli') {
 
     array_shift($argv); // take out the first param (script name)
 
-    $files = $argv;
-    $exceptions = [];
     $finder = new \AlixBa\Addic7edSubtitles\Jobs\SubtitlesFinder();
+    $io     = new \AlixBa\Addic7edSubtitles\Helpers\IO;
+
+    $files      = $argv;
+    $exceptions = [];
 
     while (!is_null($filename = array_shift($files))) {
         $file = pathinfo($filename);
@@ -16,7 +18,7 @@ if (php_sapi_name() === 'cli') {
         try {
             $srt = $finder->findSubtitle($file['filename']);
             if (!is_null($srt)) {
-                \AlixBa\Addic7edSubtitles\Helpers\Utils::saveSubtitle($file['dirname'], $file['filename'], $srt);
+                $io->saveSubtitle($file['dirname'], $file['filename'], $srt);
             }
         } catch (\Exception $e) {
             if (!in_array($filename, $exceptions)) {
