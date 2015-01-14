@@ -2,12 +2,12 @@ Please don't use this to overload Addic7ed servers.
 
 ## HOW TO
 
-Clone this repository and run `composer update`.
+Clone this repository and run `composer update`.<br/>
 Override wanted parameters from `app/config.reference.json` to `app/config.json`.
 
 ## USAGE
 
-`addic7ed-php [file] [file] [...]`
+`addic7ed-php [file] [file] [...]`<br/>
 `addic7ed-php Marvels.Agent.Carter.S01E01.HDTV.x264-KILLERS.mp4 /path/to/Gotham.S01E11.720p.HDTV.X264-DIMENSION.mkv`
 
 ## CONTRIBUTE

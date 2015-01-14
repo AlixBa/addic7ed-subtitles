@@ -17,6 +17,11 @@ final class IO
     /**
      * @var string
      */
+    public $configurationReferencePath;
+
+    /**
+     * @var string
+     */
     public $showsPath;
 
     /**
@@ -26,9 +31,10 @@ final class IO
 
     public function __construct()
     {
-        $this->configurationPath = __DIR__.'/../../../../app/config.json';
-        $this->showsPath         = __DIR__.'/../../../../app/shows.json';
-        $this->languagesPath     = __DIR__.'/../../../../app/languages.json';
+        $this->configurationPath          = __DIR__.'/../../../../app/config.json';
+        $this->configurationReferencePath = __DIR__.'/../../../../app/config.reference.json';
+        $this->showsPath                  = __DIR__.'/../../../../app/shows.json';
+        $this->languagesPath              = __DIR__.'/../../../../app/languages.json';
     }
 
     /**
