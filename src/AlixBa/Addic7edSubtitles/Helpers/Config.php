@@ -16,7 +16,13 @@ final class Config extends NConfig
      */
     public function __construct()
     {
-        parent::__construct((new IO())->configurationPath);
+        $io = new IO();
+
+        if(file_exists($io->configurationPath)) {
+            parent::__construct($io->configurationPath);
+        } else {
+            parent::__construct($io->configurationReferencePath);
+        }
     }
 
     /**
