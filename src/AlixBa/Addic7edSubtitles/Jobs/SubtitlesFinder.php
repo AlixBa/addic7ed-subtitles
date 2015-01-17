@@ -107,7 +107,7 @@ final class SubtitlesFinder
                     printf("Missing subtitles for [%s].\n", $episodeFilename);
                 }
             } else {
-                printf("Missing show [%s].\n", $episode->showName);
+                printf("Missing show [%s].\n", $episode->sanitizedShowName);
             }
         } else {
             printf("Missing language [%s].\n", $languageId);
