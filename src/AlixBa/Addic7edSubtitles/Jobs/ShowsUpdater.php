@@ -62,9 +62,19 @@ final class ShowsUpdater
         $shows = [];
         foreach ($_shows as $show) {
             $id = $this->extractShowId($show[1]);
+
+            // we don't want troublesome ids
             if (!in_array($id, $this->troublesomeShowsId())) {
-                $name         = Episode::sanitizeShowName($show[0]);
-                $shows[$name] = $id;
+                $name = Episode::sanitizeShowName($show[0]);
+
+                // if multiple shows name reference the same id
+                if (isset($this->troublesomeShowsName()[$name])) {
+                    foreach ($this->troublesomeShowsName()[$name] as $name) {
+                        $shows[$name] = $id;
+                    }
+                } else {
+                    $shows[$name] = $id;
+                }
             }
         };
 
@@ -78,6 +88,16 @@ final class ShowsUpdater
     {
         return [
           4939 // Sleepy.Hollow, empty show on addic7ed - issue with Sleepy Hollow
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function troublesomeShowsName()
+    {
+        return [
+          'Parenthood' => ['Parenthood', 'Parenthood2010'] // also known as Parenthood.2010
         ];
     }
 
