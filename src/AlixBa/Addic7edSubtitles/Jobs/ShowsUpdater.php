@@ -97,7 +97,8 @@ final class ShowsUpdater
     private function troublesomeShowsName()
     {
         return [
-          'Parenthood' => ['Parenthood', 'Parenthood2010'] // also known as Parenthood.2010
+          'Parenthood' => ['Parenthood', 'Parenthood2010'],
+          'TheAmericans2013' => ['TheAmericans2013', 'TheAmericans']
         ];
     }
 
