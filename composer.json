@@ -4,6 +4,9 @@
         "fabpot/goutte": "2.0.*@dev",
         "noodlehaus/config": "dev-master"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.5"
+    },
     "authors": [
         {
             "name": "Alix Ba",
