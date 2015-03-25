@@ -51,12 +51,24 @@ final class Episode
     {
         preg_match($this->pattern, $episodeFilename, $matches);
 
-        $this->showName          = $matches['showname'];
-        $this->sanitizedShowName = self::sanitizeShowName($matches['showname']);
+        $this->showName          = self::capitalizeShowName($matches['showname']);
+        $this->sanitizedShowName = self::sanitizeShowName($this->showName);
         $this->season            = $matches['season'];
         $this->ep                = $matches['episode'];
         $this->tags              = $this->filterTags($matches['tags']);
         $this->groups            = $this->enrichGroup($matches['group']);
+    }
+
+    /**
+     * @param $showName string the show name
+     *
+     * @return string
+     */
+    public static function capitalizeShowName($showName)
+    {
+        $tmp = str_replace('.', ' ', $showName);
+
+        return str_replace(' ', '.', ucwords($tmp));
     }
 
     /**
