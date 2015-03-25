@@ -93,20 +93,20 @@ final class Episode
         $group  = strtolower($group);
         $groups = [$group];
         $hdtv   = [
-          "lol",
-          "afg",
-          "2hd",
-          "asap",
-          "crimson",
-          "lmao",
-          "bajskorv",
-          "killers",
-          "ftp",
-          "bia",
-          "fov",
-          "dimension",
-          "evolve",
-          "immerse"
+            "lol",
+            "afg",
+            "2hd",
+            "asap",
+            "crimson",
+            "lmao",
+            "bajskorv",
+            "killers",
+            "ftp",
+            "bia",
+            "fov",
+            "dimension",
+            "evolve",
+            "immerse"
         ];
         $webdl  = ["ctrlhd", "kings", "eci", "ntb", "btn", "it00nz", "bs", "pod"];
         $dvd    = ["reward", "saints", "sprinter", "demand", "ingot", "haggis"];

@@ -25,9 +25,9 @@ final class RequestBuilder
     public function getAddictedUrl()
     {
         return sprintf(
-          '%s://%s',
-          $this->config->getAddictedScheme(),
-          $this->config->getAddictedUrl()
+            '%s://%s',
+            $this->config->getAddictedScheme(),
+            $this->config->getAddictedUrl()
         );
     }
 
@@ -37,9 +37,9 @@ final class RequestBuilder
     public function getAddictedShowsUrl()
     {
         return sprintf(
-          '%s/%s',
-          $this->getAddictedUrl(),
-          $this->config->getAddictedShowsUri()
+            '%s/%s',
+            $this->getAddictedUrl(),
+            $this->config->getAddictedShowsUri()
         );
     }
 
@@ -59,10 +59,10 @@ final class RequestBuilder
         $query = str_replace('[LANGS]', (int) $langId, $query);
 
         return sprintf(
-          '%s/%s?%s',
-          $this->getAddictedUrl(),
-          $this->config->getAddictedShowAjaxUri(),
-          $query
+            '%s/%s?%s',
+            $this->getAddictedUrl(),
+            $this->config->getAddictedShowAjaxUri(),
+            $query
         );
     }
 
@@ -96,9 +96,9 @@ final class RequestBuilder
     public function getSubtitleUrl($downloadUri)
     {
         return sprintf(
-          '%s%s',
-          $this->getAddictedUrl(),
-          $downloadUri
+            '%s%s',
+            $this->getAddictedUrl(),
+            $downloadUri
         );
     }
 }
