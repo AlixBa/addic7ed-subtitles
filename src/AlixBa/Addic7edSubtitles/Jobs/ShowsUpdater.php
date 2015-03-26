@@ -64,12 +64,12 @@ final class ShowsUpdater
             $id = $this->extractShowId($show[1]);
 
             // we don't want troublesome ids
-            if (!in_array($id, $this->troublesomeShowsId())) {
+            if (!in_array($id, $this->ignoredShowsIds())) {
                 $name = Episode::sanitizeShowName($show[0]);
 
                 // if multiple shows name reference the same id
-                if (isset($this->troublesomeShowsName()[$name])) {
-                    foreach ($this->troublesomeShowsName()[$name] as $name) {
+                if (isset($this->mappedShowsNames()[$name])) {
+                    foreach ($this->mappedShowsNames()[$name] as $name) {
                         $shows[$name] = $id;
                     }
                 } else {
@@ -82,23 +82,30 @@ final class ShowsUpdater
     }
 
     /**
+     * Ids ignored by the ShowsUpdater.
+     * TODO: Ignore globally if "0 Season, 0 Episode"?
+     *
      * @return array
      */
-    private function troublesomeShowsId()
+    private function ignoredShowsIds()
     {
         return [
-            4939 // Sleepy.Hollow, empty show on addic7ed - issue with Sleepy Hollow
+            4939, // Sleepy.Hollow, empty show - issue with Sleepy Hollow - REMOVED from Addic7ed
+            5053  // Marvels.Agents.of.S.H.I.E.L.D, empty show - issue with Marvels.Agents.of.S.H.I.E.L.D.
         ];
     }
 
     /**
+     * Sometimes Addic7ed/filename differ because of the year in the name.
+     * This method maps Addic7ed show name with possible other show names.
+     *
      * @return array
      */
-    private function troublesomeShowsName()
+    private function mappedShowsNames()
     {
         return [
             'parenthood' => ['parenthood', 'parenthood2010'],
-            'theamericans2013' => ['theamericans2013', 'theamericans']
+            'theamericans' => ['theamericans', 'theamericans2013']
         ];
     }
 
