@@ -46,7 +46,8 @@ final class Episode
     {
         preg_match($this->pattern, $episodeFilename, $matches);
 
-        $this->showName          = self::sanitizeAndCapitalizeShowName($matches['showname']);
+        $this->showName          = $matches['showname'];
+        $this->sanitizedShowname = self::sanitizeShowName($matches['showname']);
         $this->season            = $matches['season'];
         $this->ep                = $matches['episode'];
         $this->tags              = $this->filterTags($matches['tags']);
@@ -58,7 +59,7 @@ final class Episode
      *
      * @return string
      */
-    public static function sanitizeAndCapitalizeShowName($showName)
+    public static function sanitizeShowName($showName)
     {
         $tmp = str_replace('.', ' ', $showName);
 

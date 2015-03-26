@@ -8,7 +8,8 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
     {
         $episode = new Episode('The.Big.Bang.Theory.S08E18.HDTV.x264-LOL.mp4');
 
-        $this->assertEquals('TheBigBangTheory', $episode->showName);
+        $this->assertEquals('The.Big.Bang.Theory', $episode->showName);
+        $this->assertEquals('TheBigBangTheory', $episode->sanitizedShowname);
         $this->assertEquals('08', $episode->season);
         $this->assertEquals('18', $episode->ep);
 
@@ -19,7 +20,8 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
     {
         $episode = new Episode('the.big.bang.theory.818.hdtv-lol.mp4');
 
-        $this->assertEquals('TheBigBangTheory', $episode->showName);
+        $this->assertEquals('the.big.bang.theory', $episode->showName);
+        $this->assertEquals('TheBigBangTheory', $episode->sanitizedShowname);
         $this->assertEquals('8', $episode->season);
         $this->assertEquals('18', $episode->ep);
 
