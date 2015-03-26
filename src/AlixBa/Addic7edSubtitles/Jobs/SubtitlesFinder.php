@@ -64,55 +64,55 @@ final class SubtitlesFinder
     public function findSubtitle($episodeFilename)
     {
         $languageId = $this->config->getSubtitleLanguage();
-        if (isset($this->languages[$languageId])) {
-            $languageId = $this->languages[$languageId];
-
-            $episode = new Episode($episodeFilename);
-            if (isset($this->shows[$episode->sanitizedShowName])) {
-                $showId = $this->shows[$episode->sanitizedShowName];
-                $url    = $this->builder->getAddictedShowAjaxUrl($showId, $episode->season, $languageId);
-
-                printf("Trying to get subtitles from %s.\n", $url);
-                $crawler           = $this->client->request('GET', $url);
-                $matchingSubtitles = $crawler
-                  ->filter('div#season > table > tbody > tr.epeven')
-                  ->reduce(function (Crawler $node) use ($episode) {
-                      $children = $node->children();
-                      $ep       = $children->getNode(1)->nodeValue;
-                      $group    = strtolower($children->getNode(4)->nodeValue);
-                      $status   = strtolower($children->getNode(5)->nodeValue);
-
-                      return
-                        (int) $ep === (int) $episode->ep
-                        && in_array($group, $episode->groups)
-                        && $status === 'completed';
-                  });
-
-                if ($matchingSubtitles->count() != 0) {
-                    $chosenSubtitle = $matchingSubtitles->first();
-                    $download       = $chosenSubtitle->children()->getNode(9)->firstChild->getAttribute('href');
-                    $url            = $this->builder->getSubtitleUrl($download);
-
-                    printf("Downloading subtitle [%s].\n", $url);
-                    $headers = $this->builder->getRequestHeaders($showId);
-
-                    return $this
-                      ->client
-                      ->getClient()
-                      ->get($url, ['headers' => $headers])
-                      ->getBody()
-                      ->getContents();
-
-                } else {
-                    printf("Missing subtitles for [%s].\n", $episodeFilename);
-                }
-            } else {
-                printf("Missing show [%s].\n", $episode->sanitizedShowName);
-            }
-        } else {
+        if (!isset($this->languages[$languageId])) {
             printf("Missing language [%s].\n", $languageId);
+            return null;
         }
 
-        return null;
+        $languageId = $this->languages[$languageId];
+
+        $episode = new Episode($episodeFilename);
+        if (!isset($this->shows[$episode->showName])) {
+            printf("Missing show [%s].\n", $episode->showName);
+            return null;
+        }
+
+        $showId = $this->shows[$episode->showName];
+        $url    = $this->builder->getAddictedShowAjaxUrl($showId, $episode->season, $languageId);
+
+        printf("Trying to get subtitles from %s.\n", $url);
+        $crawler           = $this->client->request('GET', $url);
+        $matchingSubtitles = $crawler
+            ->filter('div#season > table > tbody > tr.epeven')
+            ->reduce(function (Crawler $node) use ($episode) {
+                $children = $node->children();
+                $ep       = $children->getNode(1)->nodeValue;
+                $group    = strtolower($children->getNode(4)->nodeValue);
+                $status   = strtolower($children->getNode(5)->nodeValue);
+
+                return
+                    (int) $ep === (int) $episode->ep
+                    && in_array($group, $episode->groups)
+                    && $status === 'completed';
+          });
+
+        if ($matchingSubtitles->count() == 0) {
+            printf("Missing subtitles for [%s].\n", $episodeFilename);
+            return null;
+        }
+
+        $chosenSubtitle = $matchingSubtitles->first();
+        $download       = $chosenSubtitle->children()->getNode(9)->firstChild->getAttribute('href');
+        $url            = $this->builder->getSubtitleUrl($download);
+
+        printf("Downloading subtitle [%s].\n", $url);
+        $headers = $this->builder->getRequestHeaders($showId);
+
+        return $this
+            ->client
+            ->getClient()
+            ->get($url, ['headers' => $headers])
+            ->getBody()
+            ->getContents();
     }
 }

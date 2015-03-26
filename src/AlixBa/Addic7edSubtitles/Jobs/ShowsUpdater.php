@@ -52,11 +52,11 @@ final class ShowsUpdater
         printf("Trying to get shows from [%s].\n", $url);
         $crawler = $this->client->request('GET', $url);
         $_shows  = $crawler
-          ->filter('table.tabel90 > tr > td > h3 > a')
-          ->reduce(function (Crawler $node) {
-              return $this->isShowLink($node->attr('href'));
-          })
-          ->extract(['_text', 'href']);
+            ->filter('table.tabel90 > tr > td > h3 > a')
+            ->reduce(function (Crawler $node) {
+                return $this->isShowLink($node->attr('href'));
+            })
+            ->extract(['_text', 'href']);
 
         printf("Found [%s] shows.\n", count($_shows));
         $shows = [];
@@ -65,7 +65,7 @@ final class ShowsUpdater
 
             // we don't want troublesome ids
             if (!in_array($id, $this->troublesomeShowsId())) {
-                $name = Episode::sanitizeShowName($show[0]);
+                $name = Episode::sanitizeAndCapitalizeShowName($show[0]);
 
                 // if multiple shows name reference the same id
                 if (isset($this->troublesomeShowsName()[$name])) {
@@ -87,7 +87,7 @@ final class ShowsUpdater
     private function troublesomeShowsId()
     {
         return [
-          4939 // Sleepy.Hollow, empty show on addic7ed - issue with Sleepy Hollow
+            4939 // Sleepy.Hollow, empty show on addic7ed - issue with Sleepy Hollow
         ];
     }
 
@@ -97,8 +97,8 @@ final class ShowsUpdater
     private function troublesomeShowsName()
     {
         return [
-          'Parenthood' => ['Parenthood', 'Parenthood2010'],
-          'TheAmericans2013' => ['TheAmericans2013', 'TheAmericans']
+            'Parenthood' => ['Parenthood', 'Parenthood2010'],
+            'TheAmericans2013' => ['TheAmericans2013', 'TheAmericans']
         ];
     }
 

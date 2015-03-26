@@ -18,7 +18,7 @@ final class Config extends NConfig
     {
         $io = new IO();
 
-        if(file_exists($io->configurationPath)) {
+        if (file_exists($io->configurationPath)) {
             parent::__construct($io->configurationPath);
         } else {
             parent::__construct($io->configurationReferencePath);
@@ -79,13 +79,13 @@ final class Config extends NConfig
     public function getRequestHeaders()
     {
         $default = [
-          'Host'             => '[URL]',
-          'Referer'          => '[SCHEME]://[URL]/[SHOW-URI]/[SHOW]',
-          'User-Agent'       => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0',
-          'Accept'           => 'text/javascript, text/html, application/xml, text/xml, */*',
-          'Accept-Language'  => 'en-us,en;q=0.5',
-          'Accept-Encoding'  => 'gzip, deflate',
-          'X-Requested-With' => 'XMLHttpRequest'
+            'Host'             => '[URL]',
+            'Referer'          => '[SCHEME]://[URL]/[SHOW-URI]/[SHOW]',
+            'User-Agent'       => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0',
+            'Accept'           => 'text/javascript, text/html, application/xml, text/xml, */*',
+            'Accept-Language'  => 'en-us,en;q=0.5',
+            'Accept-Encoding'  => 'gzip, deflate',
+            'X-Requested-With' => 'XMLHttpRequest'
         ];
 
         return array_merge($default, $this->get('request.headers', []));

@@ -17,11 +17,6 @@ final class Episode
     /**
      * @var string
      */
-    public $sanitizedShowName;
-
-    /**
-     * @var string
-     */
     public $season;
 
     /**
@@ -52,7 +47,7 @@ final class Episode
         preg_match($this->pattern, $episodeFilename, $matches);
 
         $this->showName          = $matches['showname'];
-        $this->sanitizedShowName = self::sanitizeShowName($matches['showname']);
+        $this->sanitizedShowname = self::sanitizeShowName($matches['showname']);
         $this->season            = $matches['season'];
         $this->ep                = $matches['episode'];
         $this->tags              = $this->filterTags($matches['tags']);
@@ -66,6 +61,10 @@ final class Episode
      */
     public static function sanitizeShowName($showName)
     {
+        $tmp = str_replace('.', ' ', $showName);
+
+        $showName = str_replace(' ', '.', ucwords($tmp));
+
         // UTF8 issue with preg_replace
         return mb_ereg_replace('[\W]+', '', $showName);
     }
@@ -93,20 +92,20 @@ final class Episode
         $group  = strtolower($group);
         $groups = [$group];
         $hdtv   = [
-          "lol",
-          "afg",
-          "2hd",
-          "asap",
-          "crimson",
-          "lmao",
-          "bajskorv",
-          "killers",
-          "ftp",
-          "bia",
-          "fov",
-          "dimension",
-          "evolve",
-          "immerse"
+            "lol",
+            "afg",
+            "2hd",
+            "asap",
+            "crimson",
+            "lmao",
+            "bajskorv",
+            "killers",
+            "ftp",
+            "bia",
+            "fov",
+            "dimension",
+            "evolve",
+            "immerse"
         ];
         $webdl  = ["ctrlhd", "kings", "eci", "ntb", "btn", "it00nz", "bs", "pod"];
         $dvd    = ["reward", "saints", "sprinter", "demand", "ingot", "haggis"];
