@@ -65,7 +65,7 @@ final class ShowsUpdater
 
             // we don't want troublesome ids
             if (!in_array($id, $this->troublesomeShowsId())) {
-                $name = Episode::sanitizeShowName($show[0]);
+                $name = Episode::sanitizeAndCapitalizeShowName($show[0]);
 
                 // if multiple shows name reference the same id
                 if (isset($this->troublesomeShowsName()[$name])) {

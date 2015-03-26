@@ -17,11 +17,6 @@ final class Episode
     /**
      * @var string
      */
-    public $sanitizedShowName;
-
-    /**
-     * @var string
-     */
     public $season;
 
     /**
@@ -51,8 +46,7 @@ final class Episode
     {
         preg_match($this->pattern, $episodeFilename, $matches);
 
-        $this->showName          = self::capitalizeShowName($matches['showname']);
-        $this->sanitizedShowName = self::sanitizeShowName($this->showName);
+        $this->showName          = self::sanitizeAndCapitalizeShowName($matches['showname']);
         $this->season            = $matches['season'];
         $this->ep                = $matches['episode'];
         $this->tags              = $this->filterTags($matches['tags']);
@@ -64,20 +58,12 @@ final class Episode
      *
      * @return string
      */
-    public static function capitalizeShowName($showName)
+    public static function sanitizeAndCapitalizeShowName($showName)
     {
         $tmp = str_replace('.', ' ', $showName);
 
-        return str_replace(' ', '.', ucwords($tmp));
-    }
+        $showName = str_replace(' ', '.', ucwords($tmp));
 
-    /**
-     * @param $showName string the show name
-     *
-     * @return string
-     */
-    public static function sanitizeShowName($showName)
-    {
         // UTF8 issue with preg_replace
         return mb_ereg_replace('[\W]+', '', $showName);
     }

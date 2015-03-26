@@ -72,12 +72,12 @@ final class SubtitlesFinder
         $languageId = $this->languages[$languageId];
 
         $episode = new Episode($episodeFilename);
-        if (!isset($this->shows[$episode->sanitizedShowName])) {
-            printf("Missing show [%s].\n", $episode->sanitizedShowName);
+        if (!isset($this->shows[$episode->showName])) {
+            printf("Missing show [%s].\n", $episode->showName);
             return null;
         }
 
-        $showId = $this->shows[$episode->sanitizedShowName];
+        $showId = $this->shows[$episode->showName];
         $url    = $this->builder->getAddictedShowAjaxUrl($showId, $episode->season, $languageId);
 
         printf("Trying to get subtitles from %s.\n", $url);
