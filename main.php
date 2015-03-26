@@ -5,7 +5,13 @@ if (php_sapi_name() != 'cli') {
     exit(0);
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
+if (is_dir(__DIR__.'/vendor')) {
+    // for development
+    require_once __DIR__ . '/vendor/autoload.php';
+} else {
+    // for global installation in ~/.composer
+    require_once __DIR__ . '/../../autoload.php';
+}
 
 array_shift($argv); // take out the first param (script name)
 
