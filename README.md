@@ -9,6 +9,7 @@ Override wanted parameters from `app/config.reference.json` to `app/config.json`
 
 `addic7ed-php [file] [file] [...]`<br/>
 `addic7ed-php Marvels.Agent.Carter.S01E01.HDTV.x264-KILLERS.mp4 /path/to/Gotham.S01E11.720p.HDTV.X264-DIMENSION.mkv`
+`addic7ed-php --update`
 
 ## CONTRIBUTE
 

@@ -54,9 +54,9 @@ final class RequestBuilder
     {
         $query = $this->config->getAddictedShowAjaxUriQuery();
 
-        $query = str_replace('[SHOW]', (int) $showId, $query);
-        $query = str_replace('[SEASON]', (int) $season, $query);
-        $query = str_replace('[LANGS]', (int) $langId, $query);
+        $query = str_replace('[SHOW]', (int)$showId, $query);
+        $query = str_replace('[SEASON]', (int)$season, $query);
+        $query = str_replace('[LANGS]', (int)$langId, $query);
 
         return sprintf(
             '%s/%s?%s',

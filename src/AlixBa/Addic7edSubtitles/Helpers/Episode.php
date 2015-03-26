@@ -17,6 +17,11 @@ final class Episode
     /**
      * @var string
      */
+    public $sanitizedShowName;
+
+    /**
+     * @var string
+     */
     public $season;
 
     /**
@@ -47,7 +52,7 @@ final class Episode
         preg_match($this->pattern, $episodeFilename, $matches);
 
         $this->showName          = $matches['showname'];
-        $this->sanitizedShowname = self::sanitizeShowName($matches['showname']);
+        $this->sanitizedShowName = self::sanitizeShowName($matches['showname']);
         $this->season            = $matches['season'];
         $this->ep                = $matches['episode'];
         $this->tags              = $this->filterTags($matches['tags']);
@@ -61,12 +66,9 @@ final class Episode
      */
     public static function sanitizeShowName($showName)
     {
-        $tmp = str_replace('.', ' ', $showName);
-
-        $showName = str_replace(' ', '.', ucwords($tmp));
-
-        // UTF8 issue with preg_replace
-        return mb_ereg_replace('[\W]+', '', $showName);
+        return strtolower(
+            preg_replace('/[\W]+/', '',
+                         preg_replace('/[\x00-\x1F\x80-\xFF]+/', 'x', $showName)));
     }
 
     /**

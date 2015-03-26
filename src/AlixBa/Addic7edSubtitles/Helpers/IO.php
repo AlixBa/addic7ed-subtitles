@@ -31,10 +31,10 @@ final class IO
 
     public function __construct()
     {
-        $this->configurationPath          = __DIR__.'/../../../../app/config.json';
-        $this->configurationReferencePath = __DIR__.'/../../../../app/config.reference.json';
-        $this->showsPath                  = __DIR__.'/../../../../app/shows.json';
-        $this->languagesPath              = __DIR__.'/../../../../app/languages.json';
+        $this->configurationPath          = __DIR__ . '/../../../../app/config.json';
+        $this->configurationReferencePath = __DIR__ . '/../../../../app/config.reference.json';
+        $this->showsPath                  = __DIR__ . '/../../../../app/shows.json';
+        $this->languagesPath              = __DIR__ . '/../../../../app/languages.json';
     }
 
     /**
@@ -58,10 +58,17 @@ final class IO
      */
     public function saveShows($shows)
     {
-        if (file_put_contents($this->showsPath, json_encode($shows, JSON_PRETTY_PRINT)) === false) {
-            printf("Something wen wrong while writing [%s].\n", basename($this->showsPath));
+        $jsonShows = json_encode($shows, JSON_PRETTY_PRINT);
+        $jsonError = json_last_error();
+
+        if($jsonError === JSON_ERROR_NONE) {
+            if (file_put_contents($this->showsPath, $jsonShows) === false) {
+                printf("Something went wrong while writing [%s].\n", basename($this->showsPath));
+            } else {
+                printf("Shows saved into [%s].\n", basename($this->showsPath));
+            }
         } else {
-            printf("Shows saved into [%s].\n", basename($this->showsPath));
+            printf("Something went wrong while serializing to json [ERROR: %s].\n", $jsonError);
         }
     }
 

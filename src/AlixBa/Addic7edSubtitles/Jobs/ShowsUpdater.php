@@ -65,7 +65,7 @@ final class ShowsUpdater
 
             // we don't want troublesome ids
             if (!in_array($id, $this->troublesomeShowsId())) {
-                $name = Episode::sanitizeAndCapitalizeShowName($show[0]);
+                $name = Episode::sanitizeShowName($show[0]);
 
                 // if multiple shows name reference the same id
                 if (isset($this->troublesomeShowsName()[$name])) {
@@ -97,8 +97,8 @@ final class ShowsUpdater
     private function troublesomeShowsName()
     {
         return [
-            'Parenthood' => ['Parenthood', 'Parenthood2010'],
-            'TheAmericans2013' => ['TheAmericans2013', 'TheAmericans']
+            'parenthood' => ['parenthood', 'parenthood2010'],
+            'theamericans2013' => ['theamericans2013', 'theamericans']
         ];
     }
 

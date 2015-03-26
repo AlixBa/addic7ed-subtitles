@@ -5,15 +5,21 @@ if (php_sapi_name() != 'cli') {
     exit(0);
 }
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 array_shift($argv); // take out the first param (script name)
 
-$finder = new \AlixBa\Addic7edSubtitles\Jobs\SubtitlesFinder();
-$io     = new \AlixBa\Addic7edSubtitles\Helpers\IO;
+$updater = new \AlixBa\Addic7edSubtitles\Jobs\ShowsUpdater();
+$finder   = new \AlixBa\Addic7edSubtitles\Jobs\SubtitlesFinder();
+$io       = new \AlixBa\Addic7edSubtitles\Helpers\IO;
 
-$files      = $argv;
+$options    = array_filter($argv, function ($arg) { return substr($arg, 0, 2) === '--'; });
+$files      = array_diff($argv, $options);
 $exceptions = [];
+
+if(in_array("--update", $options)) {
+    $updater->updateShows();
+}
 
 while (!is_null($filename = array_shift($files))) {
     $file = pathinfo($filename);
