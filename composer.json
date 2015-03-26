@@ -1,23 +1,30 @@
 {
     "name": "alixba/addic7ed-subtitles",
-    "require": {
-        "fabpot/goutte": "2.0.*@dev",
-        "noodlehaus/config": "dev-master"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~4.5"
-    },
+    "description": "An addic7ed subtitles downloader",
+    "keywords": [
+        "addic7ed",
+        "subtitles",
+        "downloader"
+    ],
+    "homepage": "http://github.com/AlixBa/addic7ed-subtitles",
     "authors": [
         {
             "name": "Alix Ba",
             "email": "alix.baggio@outlook.fr"
         }
     ],
+    "require": {
+        "fabpot/goutte": "2.0.*@dev",
+        "hassankhan/config": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.5"
+    },
     "autoload": {
         "psr-4": {
             "": "src"
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable" : true
+    "prefer-stable": true
 }

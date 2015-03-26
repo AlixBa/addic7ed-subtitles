@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "241d124456a201d6a6ffd2760766790c",
+    "hash": "6c919ecacf5ffd5c29c5d54aa9a224af",
     "packages": [
         {
             "name": "fabpot/goutte",
@@ -215,16 +215,16 @@
             "time": "2014-10-12 19:18:40"
         },
         {
-            "name": "noodlehaus/config",
+            "name": "hassankhan/config",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:noodlehaus/config.git",
+                "url": "https://github.com/hassankhan/config.git",
                 "reference": "42ba051954745b565306f0f82c57814f54579f8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/noodlehaus/config/zipball/42ba051954745b565306f0f82c57814f54579f8d",
+                "url": "https://api.github.com/repos/hassankhan/config/zipball/42ba051954745b565306f0f82c57814f54579f8d",
                 "reference": "42ba051954745b565306f0f82c57814f54579f8d",
                 "shasum": ""
             },
@@ -269,7 +269,6 @@
                 "yaml",
                 "yml"
             ],
-            "abandoned": "https://packagist.org/packages/hassankhan/config",
             "time": "2015-03-21 11:21:39"
         },
         {
@@ -1441,7 +1440,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "fabpot/goutte": 20,
-        "noodlehaus/config": 20
+        "hassankhan/config": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

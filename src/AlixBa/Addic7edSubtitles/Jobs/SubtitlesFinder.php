@@ -91,10 +91,10 @@ final class SubtitlesFinder
                 $status   = strtolower($children->getNode(5)->nodeValue);
 
                 return
-                    (int) $ep === (int) $episode->ep
+                    (int)$ep === (int)$episode->ep
                     && in_array($group, $episode->groups)
-                    && $status === 'completed';
-          });
+                    && $status === 'completed'; // TODO: does not contain '%'?
+            });
 
         if ($matchingSubtitles->count() == 0) {
             printf("Missing subtitles for [%s].\n", $episodeFilename);
