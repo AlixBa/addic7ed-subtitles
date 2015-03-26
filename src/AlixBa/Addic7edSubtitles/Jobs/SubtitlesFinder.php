@@ -93,7 +93,7 @@ final class SubtitlesFinder
                 return
                     (int)$ep === (int)$episode->ep
                     && in_array($group, $episode->groups)
-                    && $status === 'completed'; // TODO: does not contain '%'?
+                    && strpos($status, '%') === false;
             });
 
         if ($matchingSubtitles->count() == 0) {
