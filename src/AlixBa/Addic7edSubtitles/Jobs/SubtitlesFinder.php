@@ -63,13 +63,11 @@ final class SubtitlesFinder
      */
     public function findSubtitle($episodeFilename)
     {
-        $languageId = $this->config->getSubtitleLanguage();
-        if (!isset($this->languages[$languageId])) {
-            printf("Missing language [%s].\n", $languageId);
+        $language = $this->config->getSubtitleLanguage();
+        if (!isset($this->languages[$language])) {
+            printf("Missing language [%s].\n", $language);
             return null;
         }
-
-        $languageId = $this->languages[$languageId];
 
         $episode = new Episode($episodeFilename);
         if (!isset($this->shows[$episode->sanitizedShowName])) {
@@ -77,10 +75,11 @@ final class SubtitlesFinder
             return null;
         }
 
-        $showId = $this->shows[$episode->sanitizedShowName];
-        $url    = $this->builder->getAddictedShowAjaxUrl($showId, $episode->season, $languageId);
+        $languageId = $this->languages[$language];
+        $showId     = $this->shows[$episode->sanitizedShowName];
+        $url        = $this->builder->getAddictedShowAjaxUrl($showId, $episode->season, $languageId);
 
-        printf("Trying to get subtitles from %s.\n", $url);
+        printf("Trying to get subtitles from [%s].\n", $url);
         $crawler           = $this->client->request('GET', $url);
         $matchingSubtitles = $crawler
             ->filter('div#season > table > tbody > tr.epeven')
@@ -92,12 +91,13 @@ final class SubtitlesFinder
 
                 return
                     (int)$ep === (int)$episode->ep
-                    && in_array($group, $episode->groups)
+                    && $episode->inGroups($group)
                     && strpos($status, '%') === false;
             });
 
         if ($matchingSubtitles->count() == 0) {
-            printf("Missing subtitles for [%s].\n", $episodeFilename);
+            printf("Missing subtitles for show [%s] season [%s] episode [%s] \n  and groups [%s].\n",
+                   $episode->showName, $episode->season, $episode->ep, implode(', ', $episode->groups));
             return null;
         }
 

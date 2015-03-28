@@ -122,4 +122,24 @@ final class Episode
 
         return $groups;
     }
+
+    /**
+     * @param $group string group to look for in groups
+     *
+     * @return bool true if group in groups, false otherwise
+     */
+    public function inGroups($group)
+    {
+        $inGroups = false;
+        $group    = strtolower($group);
+        $size     = count($this->groups);
+
+        for ($i = 0; (($i < $size) && !$inGroups); $i++) {
+            if (strpos($group, $this->groups[$i]) !== false) {
+                $inGroups = true;
+            }
+        }
+
+        return $inGroups;
+    }
 }

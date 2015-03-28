@@ -5,7 +5,7 @@ if (php_sapi_name() != 'cli') {
     exit(0);
 }
 
-if (is_dir(__DIR__.'/vendor')) {
+if (is_dir(__DIR__ . '/vendor')) {
     // for development
     require_once __DIR__ . '/vendor/autoload.php';
 } else {
@@ -16,24 +16,24 @@ if (is_dir(__DIR__.'/vendor')) {
 array_shift($argv); // take out the first param (script name)
 
 $updater = new \AlixBa\Addic7edSubtitles\Jobs\ShowsUpdater();
-$finder   = new \AlixBa\Addic7edSubtitles\Jobs\SubtitlesFinder();
-$io       = new \AlixBa\Addic7edSubtitles\Helpers\IO;
+$finder  = new \AlixBa\Addic7edSubtitles\Jobs\SubtitlesFinder();
+$io      = new \AlixBa\Addic7edSubtitles\Helpers\IO;
 
 $options    = array_filter($argv, function ($arg) { return substr($arg, 0, 2) === '--'; });
 $files      = array_diff($argv, $options);
 $exceptions = [];
 
-if(in_array("--update", $options)) {
+if (in_array("--update", $options)) {
     $updater->updateShows();
 }
 
 while (!is_null($filename = array_shift($files))) {
     $file = pathinfo($filename);
-    printf("Running addic7ed-php for [%s].\n", $file['filename']);
+    printf("Running addic7ed-php for [%s].\n", $filename);
 
     try {
         $srt = $finder->findSubtitle($file['filename']);
-        if (!is_null($srt)) {
+        if (!is_null($srt) && !in_array("--no-download", $options)) {
             $io->saveSubtitle($file['dirname'], $file['filename'], $srt);
         }
     } catch (\Exception $e) {
