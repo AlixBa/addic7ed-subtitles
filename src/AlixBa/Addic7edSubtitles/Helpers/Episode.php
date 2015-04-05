@@ -67,7 +67,7 @@ final class Episode
     public static function sanitizeShowName($showName)
     {
         return strtolower(
-            preg_replace('/[\W]+/', '',
+            preg_replace('/[^a-zA-Z0-9]+/', '',
                          preg_replace('/[\x00-\x1F\x80-\xFF]+/', 'x', $showName)));
     }
 
