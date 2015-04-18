@@ -12,7 +12,7 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('thebigbangtheory', $episode->sanitizedShowName);
         $this->assertEquals(8, $episode->season);
         $this->assertEquals(18, $episode->ep);
-        //$this->assertEquals(['lol'], $episode->groups); // XXX shouldn't this contain only lol ?
+        $this->assertContains('lol', $episode->groups);
         $this->assertEquals(['hdtv', 'x264'], $episode->tags);
     }
 
@@ -24,7 +24,7 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('thebigbangtheory', $episode->sanitizedShowName);
         $this->assertEquals(8, $episode->season);
         $this->assertEquals(18, $episode->ep);
-        // $this->assertEquals(['lol'], $episode->groups); // XXX shouldn't this contain only lol ?
+        $this->assertContains('lol', $episode->groups);
         $this->assertEquals(['hdtv'], $episode->tags);
     }
 
@@ -36,7 +36,18 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('callthemidwife', $episode->sanitizedShowName);
         $this->assertEquals(4, $episode->season);
         $this->assertEquals(8, $episode->ep);
-        // $this->assertEquals(['fov'], $episode->groups); // XXX shouldn't this contain only fov ?
-        //$this->assertEquals(['hdtv', 'x264'], $episode->tags);  // XXX shouldn't this contain "hdtv" and "x264" ?
+        $this->assertContains('fov', $episode->groups);
+        $this->assertEquals(['hdtv', 'x264'], $episode->tags);
+    }
+
+    function testTagsFiltering()
+    {
+        $tags = "Hdtv-x264_randomTag.proper";
+        $filtered = Episode::filterTags($tags);
+
+        $this->assertContains('hdtv', $filtered);
+        $this->assertContains('x264', $filtered);
+        $this->assertContains('proper', $filtered);
+        $this->assertNotContains('randomtag', $filtered);
     }
 }

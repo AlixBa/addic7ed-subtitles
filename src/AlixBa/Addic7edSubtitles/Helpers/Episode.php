@@ -72,14 +72,14 @@ final class Episode
     }
 
     /**
-     * @param $tags array identified tags
+     * @param $tags string identified tags
      *
      * @return array
      */
-    public function filterTags($tags)
+    public static function filterTags($tags)
     {
         $available = ['proper', 'hdtv', 'x264', '720p'];
-        $tags      = explode('.', strtolower($tags));
+        $tags      = preg_split('/\.|_|-/', strtolower($tags));
 
         return array_intersect($tags, $available);
     }
@@ -89,7 +89,7 @@ final class Episode
      *
      * @return array
      */
-    public function enrichGroup($group)
+    public static function enrichGroup($group)
     {
         $group  = strtolower($group);
         $groups = [$group];

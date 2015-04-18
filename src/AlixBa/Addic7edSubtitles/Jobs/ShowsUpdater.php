@@ -105,7 +105,8 @@ final class ShowsUpdater
     {
         return [
             'parenthood' => ['parenthood', 'parenthood2010'],
-            'theamericans' => ['theamericans', 'theamericans2013']
+            'theamericans' => ['theamericans', 'theamericans2013'],
+            'daredevil' => ['daredevil', 'marvelsdaredevil']
         ];
     }
 
