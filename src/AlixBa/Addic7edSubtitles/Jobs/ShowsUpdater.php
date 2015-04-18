@@ -50,21 +50,25 @@ final class ShowsUpdater
         $url = $this->builder->getAddictedShowsUrl();
 
         printf("Trying to get shows from [%s].\n", $url);
-        $crawler = $this->client->request('GET', $url);
-        $_shows  = $crawler
+        $crawler          = $this->client->request('GET', $url);
+        $showsLinkAndName = $crawler
             ->filter('table.tabel90 > tr > td > h3 > a')
-            ->reduce(function (Crawler $node) {
-                return $this->isShowLink($node->attr('href'));
-            })
             ->extract(['_text', 'href']);
 
-        printf("Found [%s] shows.\n", count($_shows));
+        $showsSeasons = $crawler
+            ->filter('table.tabel90 > tr > td.newsDate')
+            ->extract(['_text']);
+
+        if (count($showsLinkAndName) != count($showsSeasons)) {
+            throw new \Exception("Inconsistencies detected while updating shows.");
+        }
+
+        printf("Found [%s] shows.\n", count($showsLinkAndName));
         $shows = [];
-        foreach ($_shows as $show) {
+        foreach ($showsLinkAndName as $n => $show) {
             $id = $this->extractShowId($show[1]);
 
-            // we don't want troublesome ids
-            if (!in_array($id, $this->ignoredShowsIds())) {
+            if ($this->nonEmptyShow($showsSeasons[$n])) {
                 $name = Episode::sanitizeShowName($show[0]);
 
                 // if multiple shows name reference the same id
@@ -79,20 +83,6 @@ final class ShowsUpdater
         };
 
         $this->io->saveShows($shows);
-    }
-
-    /**
-     * Ids ignored by the ShowsUpdater.
-     * TODO: Ignore globally if "0 Season, 0 Episode"?
-     *
-     * @return array
-     */
-    private function ignoredShowsIds()
-    {
-        return [
-            4939, // Sleepy.Hollow, empty show - issue with Sleepy Hollow - REMOVED from Addic7ed
-            5053  // Marvels.Agents.of.S.H.I.E.L.D, empty show - issue with Marvels.Agents.of.S.H.I.E.L.D.
-        ];
     }
 
     /**
@@ -123,12 +113,12 @@ final class ShowsUpdater
     }
 
     /**
-     * @param $href string the href to test
+     * @param string $showSeason The numbers of seasons and episodes
      *
      * @return bool
      */
-    private function isShowLink($href)
+    private function nonEmptyShow($showSeason)
     {
-        return preg_match($this->hrefPattern, $href) === 1;
+        return strpos($showSeason, '0 Seasons') === false;
     }
 }
