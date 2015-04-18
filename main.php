@@ -23,7 +23,10 @@ $options    = array_filter($argv, function ($arg) { return substr($arg, 0, 2) ==
 $files      = array_diff($argv, $options);
 $exceptions = [];
 
-if (in_array("--update", $options)) {
+$download = !in_array("--no-download", $options);
+$update   = in_array("--update", $options);
+
+if ($update) {
     $updater->updateShows();
 }
 
@@ -32,8 +35,8 @@ while (!is_null($filename = array_shift($files))) {
     printf("Running addic7ed-php for [%s].\n", $filename);
 
     try {
-        $srt = $finder->findSubtitle($file['filename']);
-        if (!is_null($srt) && !in_array("--no-download", $options)) {
+        $srt = $finder->findSubtitle($file['filename'], $download);
+        if (!is_null($srt)) {
             $io->saveSubtitle($file['dirname'], $file['filename'], $srt);
         }
     } catch (\Exception $e) {

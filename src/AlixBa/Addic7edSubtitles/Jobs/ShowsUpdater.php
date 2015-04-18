@@ -113,7 +113,7 @@ final class ShowsUpdater
     }
 
     /**
-     * @param string $showSeason The numbers of seasons and episodes
+     * @param $showSeason string The numbers of seasons and episodes
      *
      * @return bool
      */

@@ -58,10 +58,11 @@ final class SubtitlesFinder
 
     /**
      * @param $episodeFilename string show file name
+     * @param $download boolean download the file?
      *
      * @return null|string
      */
-    public function findSubtitle($episodeFilename)
+    public function findSubtitle($episodeFilename, $download)
     {
         $language = $this->config->getSubtitleLanguage();
         if (!isset($this->languages[$language])) {
@@ -102,8 +103,13 @@ final class SubtitlesFinder
         }
 
         $chosenSubtitle = $matchingSubtitles->first();
-        $download       = $chosenSubtitle->children()->getNode(9)->firstChild->getAttribute('href');
-        $url            = $this->builder->getSubtitleUrl($download);
+        $downloadUri    = $chosenSubtitle->children()->getNode(9)->firstChild->getAttribute('href');
+        $url            = $this->builder->getSubtitleUrl($downloadUri);
+
+        if ($download === false) {
+            printf("Chosen subtitle [%s].\n", $url);
+            return null;
+        }
 
         printf("Downloading subtitle [%s].\n", $url);
         $headers = $this->builder->getRequestHeaders($showId);
