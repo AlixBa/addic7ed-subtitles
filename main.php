@@ -31,21 +31,24 @@ if ($update) {
 }
 
 while (!is_null($filename = array_shift($files))) {
-    $file = pathinfo($filename);
     printf("Running addic7ed-php for [%s].\n", $filename);
 
+    $extensions = ['mp4', 'mkv', 'avi'];
+    $file       = pathinfo($filename);
+    $basename   = in_array($file['extension'], $extensions) ? $file['filename'] : $basename = $file['basename'];
+
     try {
-        $srt = $finder->findSubtitle($file['filename'], $download);
+        $srt = $finder->findSubtitle($basename, $download);
         if (!is_null($srt)) {
-            $io->saveSubtitle($file['dirname'], $file['filename'], $srt);
+            $io->saveSubtitle($file['dirname'], $basename, $srt);
         }
     } catch (\Exception $e) {
         if (!in_array($filename, $exceptions)) {
-            printf("Error while running addic7ed-php for [%s]. Will retry.\n", $file['filename']);
+            printf("Error while running addic7ed-php for [%s]. Will retry.\n", $basename);
             $exceptions[] = $filename;
             array_push($files, $filename);
         } else {
-            printf("Error while running addic7ed-php for [%s].\n", $file['filename']);
+            printf("Error while running addic7ed-php for [%s].\n", $basename);
         }
     }
 
