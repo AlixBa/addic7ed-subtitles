@@ -107,7 +107,8 @@ final class Episode
             "fov",
             "dimension",
             "evolve",
-            "immerse"
+            "immerse",
+            "fum"
         ];
         $webdl  = ["ctrlhd", "kings", "eci", "ntb", "btn", "it00nz", "bs", "pod"];
         $dvd    = ["reward", "saints", "sprinter", "demand", "ingot", "haggis"];
