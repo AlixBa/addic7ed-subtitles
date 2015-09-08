@@ -98,7 +98,8 @@ final class ShowsUpdater
             'theamericans' => ['theamericans', 'theamericans2013'],
             'daredevil' => ['daredevil', 'marvelsdaredevil'],
             'themessengers' => ['themessengers', 'themessengers2015'],
-            'ballers2014' => ['ballers2014', 'ballers2015']
+            'ballers2014' => ['ballers2014', 'ballers2015'],
+            'scream' => ['scream', 'screamthetvseries'],
         ];
     }
 
