@@ -100,6 +100,7 @@ final class ShowsUpdater
             'themessengers' => ['themessengers', 'themessengers2015'],
             'ballers2014' => ['ballers2014', 'ballers2015'],
             'scream' => ['scream', 'screamthetvseries'],
+            'screamqueens' => ['screamqueens', 'screamqueens2015'],
         ];
     }
 
