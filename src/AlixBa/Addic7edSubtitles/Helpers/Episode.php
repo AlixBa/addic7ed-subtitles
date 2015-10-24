@@ -42,7 +42,7 @@ final class Episode
     /**
      * @var
      */
-    private $pattern = '/^(?<showname>.*\w)[\[\. ]+S?(?<season>\d{1,2})[-\. ]?[EX]?(?<episode>\d{2})([-\. ]?[EX]?\d{2})*[\]\. ]+(?<tags>.*)-(?<group>\w*)(\.\w{3})?$/i';
+    private $pattern = '/^(?<showname>.*\w)[\[\. ]+S?(?<season>\d{1,2})[-\. ]?[EX]?(?<episode>\d{2})([-\. ]?[EX]?\d{2})*[\]\. ]+(?<tags>.*)-(?<group>\w*)(\.?\[\w+\])?(\.\w{3})?$/i';
 
     /**
      * @param $episodeFilename string formatted episode filename
