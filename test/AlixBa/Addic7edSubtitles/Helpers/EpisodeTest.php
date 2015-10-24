@@ -50,4 +50,12 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('proper', $filtered);
         $this->assertNotContains('randomtag', $filtered);
     }
+
+    function testDistributionGroupFileName()
+    {
+        $episode1 = new Episode("Once.Upon.A.Time.S05E02.PROPER.HDTV.x264-KILLERS.[VTV].mp4");
+        $episode2 = new Episode("Once.Upon.A.Time.S05E02.PROPER.HDTV.x264-KILLERS.mp4");
+
+        $this->assertEquals($episode1, $episode2);
+    }
 }
