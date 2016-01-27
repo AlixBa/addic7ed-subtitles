@@ -2,7 +2,10 @@ Please don't use this to overload Addic7ed servers.
 
 ## HOW TO
 
-Clone this repository and run `composer update`.<br/>
+`composer global require alixba/addic7ed-subtitles`<br/>
+OR<br/>
+`git clone git@github.com:AlixBa/addic7ed-subtitles.git && cd addic7ed-subtitles && composer update`.<br/>
+
 Override wanted parameters from `app/config.reference.json` to `app/config.json`.
 
 ## USAGE
