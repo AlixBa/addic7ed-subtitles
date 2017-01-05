@@ -2,11 +2,10 @@
 
 namespace AlixBa\Addic7edSubtitles\Jobs;
 
+use AlixBa\Addic7edSubtitles\Helpers\Episode;
 use AlixBa\Addic7edSubtitles\Helpers\IO;
 use AlixBa\Addic7edSubtitles\Helpers\RequestBuilder;
-use AlixBa\Addic7edSubtitles\Helpers\Episode;
 use Goutte\Client;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class ShowsUpdater
@@ -101,6 +100,8 @@ final class ShowsUpdater
             'ballers2014' => ['ballers2014', 'ballers2015'],
             'scream' => ['scream', 'screamthetvseries'],
             'screamqueens' => ['screamqueens', 'screamqueens2015'],
+            'travelers' => ['travelers', 'travelers2016'],
+            'shooter2016' => ['shooter', 'shooter2016'],
         ];
     }
 
