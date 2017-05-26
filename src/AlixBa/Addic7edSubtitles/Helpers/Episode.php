@@ -35,11 +35,6 @@ final class Episode
     public $tags;
 
     /**
-     * @var array
-     */
-    public $groups;
-
-    /**
      * @var
      */
     private $pattern = '/^(?<showname>.*\w)[\[\. ]+S?(?<season>\d{1,2})[-\. ]?[EX]?(?<episode>\d{2})([-\. ]?[EX]?\d{2})*[\]\. ]+(?<tags>.*)-(?<group>\w*)(\.?\[\w+\])?(\.\w{3})?$/i';
@@ -51,12 +46,14 @@ final class Episode
     {
         preg_match($this->pattern, $episodeFilename, $matches);
 
+        $filteredTags = self::filterTags(self::sanitizeTags($matches['tags']));
+        $enrichedGroup = self::enrichGroup($matches['group']);
+
         $this->showName          = $matches['showname'];
         $this->sanitizedShowName = self::sanitizeShowName($matches['showname']);
         $this->season            = $matches['season'];
         $this->ep                = $matches['episode'];
-        $this->tags              = $this->filterTags($matches['tags']);
-        $this->groups            = $this->enrichGroup($matches['group']);
+        $this->tags              = array_merge($filteredTags, $enrichedGroup);
     }
 
     /**
@@ -74,12 +71,22 @@ final class Episode
     /**
      * @param $tags string identified tags
      *
+     * @return string
+     */
+    public static function sanitizeTags($tags)
+    {
+        return str_replace('web-dl', 'webdl', strtolower($tags));
+    }
+
+    /**
+     * @param $tags string identified tags
+     *
      * @return array
      */
     public static function filterTags($tags)
     {
-        $available = ['proper', 'hdtv', 'x264', '720p'];
-        $tags      = preg_split('/\.|_|-/', strtolower($tags));
+        $available = ['proper', 'hdtv', 'x264', '720p', 'webdl', 'webrip'];
+        $tags      = preg_split('/\.|_|-|\|/', strtolower($tags));
 
         return array_intersect($tags, $available);
     }
@@ -125,22 +132,34 @@ final class Episode
     }
 
     /**
-     * @param $group string group to look for in groups
+     * @param $tag string tag to look for in tags
      *
-     * @return bool true if group in groups, false otherwise
+     * @return bool true if tag in tags, false otherwise
      */
-    public function inGroups($group)
+    public function inTags($tag)
     {
-        $inGroups = false;
-        $group    = strtolower($group);
-        $size     = count($this->groups);
+        $inTags = false;
+        $tag    = self::sanitizeTags($tag);
+        $size   = count($this->tags);
 
-        for ($i = 0; (($i < $size) && !$inGroups); $i++) {
-            if (strpos($group, $this->groups[$i]) !== false) {
-                $inGroups = true;
+        for ($i = 0; (($i < $size) && !$inTags); $i++) {
+            if (strpos($tag, $this->tags[$i]) !== false) {
+                $inTags = true;
             }
         }
 
-        return $inGroups;
+        return $inTags;
+    }
+
+    /**
+     * @param $tag string tag to score
+     *
+     * @return int the score of this tag
+     */
+    public function score($tag)
+    {
+        $tags  = preg_split('/\.|_|-|\|/', self::sanitizeTags($tag));
+
+        return count(array_intersect($this->tags, $tags));
     }
 }
