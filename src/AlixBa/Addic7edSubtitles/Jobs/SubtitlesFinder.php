@@ -92,19 +92,31 @@ final class SubtitlesFinder
 
                 return
                     (int)$ep === (int)$episode->ep
-                    && $episode->inGroups($group)
+                    && $episode->inTags($group)
                     && strpos($status, '%') === false;
+            })
+            ->each(function (Crawler $node, $i) use ($episode) {
+                $children    = $node->children();
+                $group       = strtolower($children->getNode(4)->nodeValue);
+                $downloadUri = $children->getNode(9)->firstChild->getAttribute('href');
+
+                $score = $episode->score($group);
+
+                return [ 'uri' => $downloadUri, 'score' => $score ];
             });
 
-        if ($matchingSubtitles->count() == 0) {
-            printf("Missing subtitles for show [%s] season [%s] episode [%s] \n  and groups [%s].\n",
-                   $episode->showName, $episode->season, $episode->ep, implode(', ', $episode->groups));
+        if (count($matchingSubtitles) == 0) {
+            printf("Missing subtitles for show [%s] season [%s] episode [%s] \n  and tags [%s].\n",
+                   $episode->showName, $episode->season, $episode->ep, implode(', ', $episode->tags));
             return null;
         }
 
-        $chosenSubtitle = $matchingSubtitles->first();
-        $downloadUri    = $chosenSubtitle->children()->getNode(9)->firstChild->getAttribute('href');
-        $url            = $this->builder->getSubtitleUrl($downloadUri);
+        uasort($matchingSubtitles, function ($a, $b) {
+            return $a['score'] < $b['score'];
+        });
+
+        $downloadUri = array_shift($matchingSubtitles)['uri'];
+        $url         = $this->builder->getSubtitleUrl($downloadUri);
 
         if ($download === false) {
             printf("Chosen subtitle [%s].\n", $url);

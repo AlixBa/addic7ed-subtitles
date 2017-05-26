@@ -12,8 +12,9 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('thebigbangtheory', $episode->sanitizedShowName);
         $this->assertEquals(8, $episode->season);
         $this->assertEquals(18, $episode->ep);
-        $this->assertContains('lol', $episode->groups);
-        $this->assertEquals(['hdtv', 'x264'], $episode->tags);
+        $this->assertContains('hdtv', $episode->tags);
+        $this->assertContains('x264', $episode->tags);
+        $this->assertContains('lol', $episode->tags);
     }
 
     function testLowerCasedFileName()
@@ -24,8 +25,8 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('thebigbangtheory', $episode->sanitizedShowName);
         $this->assertEquals(8, $episode->season);
         $this->assertEquals(18, $episode->ep);
-        $this->assertContains('lol', $episode->groups);
-        $this->assertEquals(['hdtv'], $episode->tags);
+        $this->assertContains('hdtv', $episode->tags);
+        $this->assertContains('lol', $episode->tags);
     }
 
     function testUnderscoredFileName()
@@ -36,8 +37,9 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('callthemidwife', $episode->sanitizedShowName);
         $this->assertEquals(4, $episode->season);
         $this->assertEquals(8, $episode->ep);
-        $this->assertContains('fov', $episode->groups);
-        $this->assertEquals(['hdtv', 'x264'], $episode->tags);
+        $this->assertContains('hdtv', $episode->tags);
+        $this->assertContains('x264', $episode->tags);
+        $this->assertContains('fov', $episode->tags);
     }
 
     function testTagsFiltering()
@@ -57,5 +59,16 @@ class EpisodeTest extends \PHPUnit_Framework_TestCase
         $episode2 = new Episode("Once.Upon.A.Time.S05E02.PROPER.HDTV.x264-KILLERS.mp4");
 
         $this->assertEquals($episode1, $episode2);
+    }
+
+    function testScoring()
+    {
+        $episode = new Episode('The.Big.Bang.Theory.S08E18.HDTV.WEB-DL.x264-LOL.mp4');
+
+        $tag1 = 'LOL.HDTV.x264';
+        $tag2 = 'WEB-DL|LOL';
+
+        $this->assertEquals(3, $episode->score($tag1));
+        $this->assertEquals(2, $episode->score($tag2));
     }
 }
