@@ -102,6 +102,7 @@ final class ShowsUpdater
             'screamqueens' => ['screamqueens', 'screamqueens2015'],
             'travelers' => ['travelers', 'travelers2016'],
             'shooter2016' => ['shooter', 'shooter2016'],
+            'theflash2014' => ['theflash', 'theflash2014'],
         ];
     }
 
